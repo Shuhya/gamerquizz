@@ -19,7 +19,7 @@ const QUESTIONS = [
   { id:'f6', format:'anecdote', theme:'cultes', diff:'easy', asset:null, ic:'🤯',
     text:'Quelle franchise de plateau multimillésimes se joue avec un dé, des monnaies et des blocs à « ? » ?',
     opts:['Monopoly','Mario Party','Jeu de l\'oie','Wii Party'], ans:1 },
-  { id:'f7', format:'date', theme:'cultes', diff:'easy', asset:null, ic:'📅',
+  { id:'f7', format:'date', theme:'cultes', diff:'easy', asset:'assets/theme/switch.jpg', ic:'📅',
     text:'La Switch est sortie en 2017. Quel jeu l\'a accompagnée au lancement ?',
     opts:['Super Mario Odyssey','Zelda: Breath of the Wild','Splatoon 2','Mario Kart 8 Deluxe'], ans:1 },
   { id:'f8', format:'riddle', theme:'cultes', diff:'easy', asset:null, ic:'🧩',
