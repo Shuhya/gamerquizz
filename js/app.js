@@ -190,27 +190,151 @@ function marioSVG() {
   rows.forEach((row, y) => { for (let x = 0; x < row.length; x++) { const c = C[row[x]]; if (c) rects += '<rect x="' + x + '" y="' + y + '" width="1" height="1" fill="' + c + '"/>'; } });
   return '<svg class="lvl-mario" viewBox="0 0 12 15" width="36" height="45" shape-rendering="crispEdges">' + rects + '</svg>';
 }
+function koopaSVG() {
+  return '<svg viewBox="0 0 26 30" width="26" height="30" shape-rendering="crispEdges" style="filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))">'
+    + '<rect x="0" y="9" width="9" height="7" fill="#ffd23e"/><rect x="1" y="11" width="2" height="2" fill="#111"/>'
+    + '<rect x="6" y="6" width="17" height="17" rx="4" fill="#2fbf4f"/>'
+    + '<rect x="8" y="8" width="13" height="4" rx="2" fill="#7ee787"/>'
+    + '<rect x="8" y="23" width="4" height="5" fill="#ffd23e"/><rect x="17" y="23" width="4" height="5" fill="#ffd23e"/>'
+    + '</svg>';
+}
+
+/* --- Bande plateformer vivante : moteur mini-jeu en bas de l'ecran, toutes pages --- */
+let LVL = null;
 function addLevel() {
-  const host = document.getElementById('s-quiz');
-  if (!host || host.querySelector('.lvlband')) return;
+  if (LVL) return;
   const lane = document.createElement('div');
   lane.className = 'lvlband';
-  lane.innerHTML = '<div class="lvl-ground"></div><div class="lvl-world"></div><div class="lvl-runner">' + marioSVG() + '</div>';
-  const w = lane.querySelector('.lvl-world');
-  const items = [
-    { c:'lv-cloud', x:5,  y:8 },  { c:'lv-block', x:14, y:52 }, { c:'lv-coin', x:22, y:48 },
-    { c:'lv-bush',  x:30, y:28 }, { c:'lv-cloud', x:38, y:4 },  { c:'lv-pipe', x:46, y:28 },
-    { c:'lv-coin',  x:58, y:46 }, { c:'lv-block', x:64, y:52 }, { c:'lv-cloud', x:72, y:10 },
-    { c:'lv-bush',  x:82, y:28 }, { c:'lv-coin', x:90, y:44 }, { c:'lv-block', x:96, y:52 },
-  ];
-  items.forEach(it => { for (let rep = 0; rep < 2; rep++) {
+  lane.innerHTML = '<div class="lvl-ground"></div><div class="lvl-deco"></div><div class="lvl-world"></div>'
+    + '<div class="lvl-runner">' + marioSVG() + '</div>'
+    + '<div class="lvl-hud"><span class="coin-ic"></span><span id="lvl-coins">0</span></div>';
+  document.body.appendChild(lane);
+
+  const world = lane.querySelector('.lvl-world');
+  const deco = lane.querySelector('.lvl-deco');
+  const runner = lane.querySelector('.lvl-runner');
+  const hud = lane.querySelector('#lvl-coins');
+  const GY = 28, GRAV = 1500, JUMP = 430;
+  const S = {
+    W: window.innerWidth, mx: window.innerWidth * 0.12,
+    speed: 70, target: 70, nextChange: 2.5, boost: 0,
+    feet: GY, vy: 0, onGround: true,
+    inv: 0, coins: 0, t: 0,
+    nextObst: 300, nextDeco: 0, obs: [],
+  };
+  LVL = { excite() { S.boost = Math.max(S.boost, 1.1); } };
+
+  const mk = (cls, x, bottom, w, h, solid) => {
     const d = document.createElement('div');
-    d.className = it.c;
-    d.style.left = (it.x + rep * 100) + '%';
-    d.style.bottom = it.y + 'px';
-    w.appendChild(d);
-  } });
-  host.appendChild(lane);
+    d.className = cls; d.style.left = x + 'px'; d.style.bottom = bottom + 'px';
+    world.appendChild(d);
+    return { el: d, x, w, h, bottom, solid: !!solid, dead: false, extra: 0 };
+  };
+  const spawnPattern = () => {
+    const x = S.W + 60;
+    const roll = Math.random();
+    if (roll < 0.22) mk('lv-pipe', x, GY, 34, 46, true);
+    else if (roll < 0.42) { mk('lv-block', x, GY, 24, 24, true); mk('lv-block', x, GY + 24, 24, 24, true); }
+    else if (roll < 0.60) mk('lv-block', x, GY, 24, 24, true);
+    else if (roll < 0.78) {
+      const o = mk('lv-koopa', x, GY, 26, 30, true); o.extra = 34; o.koopa = true;
+      o.el.innerHTML = koopaSVG();
+    } else { for (let i = 0; i < 3; i++) mk('lv-coin', x + i * 26, 54 + (i === 1 ? 10 : 0), 16, 16, false); }
+    S.nextObst = 150 + Math.random() * 190 + S.speed * 0.45;
+  };
+  const spawnDeco = () => {
+    const x = S.W + 40;
+    const d = document.createElement('div');
+    if (Math.random() < 0.55) { d.className = 'lv-cloud'; d.style.bottom = (38 + Math.random() * 26) + 'px'; d.px = 0.4; }
+    else { d.className = 'lv-bush'; d.style.bottom = GY + 'px'; d.px = 0.92; }
+    d.style.left = x + 'px'; deco.appendChild(d);
+    S.nextDeco = 140 + Math.random() * 260;
+  };
+  const popAt = (x, bottom, txt) => {
+    const p = document.createElement('div');
+    p.className = 'lv-pop'; p.textContent = txt;
+    p.style.left = x + 'px'; p.style.bottom = bottom + 'px';
+    world.appendChild(p); setTimeout(() => p.remove(), 650);
+  };
+  const overlapX = (o) => o.x < S.mx + 26 && o.x + o.w > S.mx + 4;
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { for (let i = 0; i < 6; i++) spawnDeco(); return; }
+
+  let last = performance.now();
+  const tick = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now; S.t += dt;
+    // vitesse vivante : lerp vers une cible qui change, + boost quand tu reponds juste
+    S.nextChange -= dt;
+    if (S.nextChange <= 0) { S.target = 55 + Math.random() * 95; S.nextChange = 2 + Math.random() * 3.5; }
+    S.boost = Math.max(0, S.boost - dt * 0.55);
+    S.speed += ((S.target * (1 + S.boost)) - S.speed) * Math.min(1, dt * 1.6);
+
+    // IA de saut : regarde devant, saute les obstacles ou vers les pieces
+    if (S.onGround) {
+      let jump = false;
+      for (const o of S.obs) { if (!o.solid) continue;
+        const d = o.x - (S.mx + 26);
+        if (d > -14 && d < 34 + S.speed * 0.30) { jump = true; break; } }
+      if (!jump) for (const o of S.obs) { if (o.solid) continue;
+        const d = o.x - (S.mx + 26);
+        if (d > -18 && d < 20 + S.speed * 0.22) { jump = true; break; } }
+      if (jump) { S.vy = JUMP; S.onGround = false; }
+    }
+
+    // physique
+    S.vy -= GRAV * dt; S.feet += S.vy * dt;
+    let support = GY;
+    for (const o of S.obs) if (o.solid && overlapX(o)) support = Math.max(support, o.bottom + o.h);
+    if (S.feet <= support) { S.feet = support; S.vy = 0; S.onGround = true; }
+    else S.onGround = false;
+    runner.style.bottom = S.feet + 'px';
+
+    // deplacement + collisions
+    for (const o of S.obs) {
+      if (o.dead) continue;
+      o.x -= (S.speed + o.extra) * dt;
+      o.el.style.left = o.x + 'px';
+      if (o.koopa) { o.el.classList.toggle('k-step', Math.sin(S.t * 14) > 0); }
+      if (!overlapX(o)) continue;
+      const mTop = S.feet, mBot = S.feet + 42;
+      if (!o.solid) { // piece ramassee
+        if (mBot > o.bottom && mTop < o.bottom + o.h) {
+          o.dead = true; o.el.remove(); S.coins++; hud.textContent = S.coins;
+          popAt(o.x, o.bottom + 14, '+100');
+        }
+      } else if (o.koopa) { // ecrase si on tombe dessus, sinon coup recu
+        if (S.vy < -40 && S.feet > o.bottom + o.h - 12) {
+          o.dead = true; o.el.classList.add('stomped'); setTimeout(() => o.el.remove(), 500);
+          S.vy = 300; S.coins += 2; hud.textContent = S.coins; popAt(o.x, o.bottom + 34, '+200');
+        } else if (S.inv <= 0) {
+          S.inv = 1.6; runner.classList.add('hit'); setTimeout(() => runner.classList.remove('hit'), 750);
+          lane.classList.remove('hurt'); void lane.offsetWidth; lane.classList.add('hurt');
+          o.dead = true; o.el.classList.add('kicked'); setTimeout(() => o.el.remove(), 500);
+        }
+      } else if (S.feet < o.bottom + o.h - 8 && S.feet + 40 > o.bottom) {
+        // collision laterale bloc/tuyau : petit saut de repli
+        if (S.onGround) { S.vy = JUMP * 0.8; S.onGround = false; }
+      }
+    }
+    S.obs = S.obs.filter(o => !o.dead && o.x + o.w > -70 && document.body.contains(o.el));
+    S.inv = Math.max(0, S.inv - dt);
+
+    // decor en parallaxe
+    Array.from(deco.children).forEach(d => {
+      d._x = (d._x === undefined ? parseFloat(d.style.left) : d._x) - S.speed * (d.px || 0.5) * dt;
+      d.style.left = d._x + 'px';
+      if (d._x < -70) d.remove();
+    });
+
+    // spawns
+    S.nextObst -= S.speed * dt; if (S.nextObst <= 0) spawnPattern();
+    S.nextDeco -= S.speed * dt; if (S.nextDeco <= 0) spawnDeco();
+
+    requestAnimationFrame(tick);
+  };
+  spawnPattern(); S.nextObst = 260;
+  requestAnimationFrame(tick);
 }
 function flash(kind) {
   const f = document.getElementById('flash');
@@ -238,6 +362,7 @@ function answer(btn, ok) {
     p.textContent = '+' + gained + (combo > 1 ? ' ×' + combo : '');
     p.style.display = 'block'; p.style.animation = 'none'; void p.offsetWidth; p.style.animation = '';
     flash('good'); card.classList.remove('bump'); void card.offsetWidth; card.classList.add('bump');
+    if (LVL && LVL.excite) LVL.excite(); // Mario accelere quand tu reponds juste
     if (combo >= 2) { sfxCombo(combo); comboPop(combo); streak.classList.add('hot'); } else sfxGood();
     if (navigator.vibrate) navigator.vibrate(40);
   } else {
@@ -279,3 +404,4 @@ document.addEventListener('keydown', e => {
   if (n >= 1 && n <= 4) { const b = document.querySelectorAll('#q-opts button')[n-1]; if (b && !b.disabled) b.click(); }
 });
 renderFilters();
+addLevel();
