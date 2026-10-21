@@ -192,9 +192,9 @@ function marioSVG() {
 }
 function addLevel() {
   const host = document.getElementById('s-quiz');
-  if (!host || host.querySelector('.lvl')) return;
+  if (!host || host.querySelector('.lvlband')) return;
   const lane = document.createElement('div');
-  lane.className = 'lvl';
+  lane.className = 'lvlband';
   lane.innerHTML = '<div class="lvl-ground"></div><div class="lvl-world"></div><div class="lvl-runner">' + marioSVG() + '</div>';
   const w = lane.querySelector('.lvl-world');
   const items = [
