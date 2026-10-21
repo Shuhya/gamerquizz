@@ -10,25 +10,26 @@
 <div class="flash" id="flash"></div>
 <div class="app">
   <nav class="nav">
-    <div class="logo">GAMER<b>QUIZZ</b> <span style="font-size:12px; color:var(--dim); font-weight:400">MVP v0.1</span></div>
+    <div class="logo">GAMER<b>QUIZZ</b> <span style="font-size:12px; color:var(--dim); font-weight:400">v0.4</span></div>
     <button class="navbtn" onclick="go('home')">← Menu</button>
   </nav>
 
   <!-- ============ HOME ============ -->
   <section class="screen show" id="s-home">
     <div class="hero">
-      <div class="badge">🎮 IMAGE · SON · CITATION · ANECDOTE · DATE</div>
+      <div class="badge">IMAGE · SON · CITATION · ANECDOTE · DATE · DEVINETTE</div>
       <h1>Devine le jeu.<br>Plus vite que les autres.</h1>
       <p>Choisis les formats d'indice et la difficulté, puis enchaîne les questions. Chaque bonne réponse rapide fait grimper ton combo.</p>
     </div>
+    <div class="themes" id="theme-filters"></div>
     <div class="modes" id="mode-filters"></div>
     <div class="diffs">
-      <button onclick="start('easy')"><span class="lvl">NIVEAU 1 · ÉCHAUFFEMENT</span>🙂 Facile</button>
-      <button onclick="start('medium')"><span class="lvl">NIVEAU 2 · CONFIRMÉ</span>😐 Moyen</button>
-      <button onclick="start('hard')"><span class="lvl">NIVEAU 3 · EXPERT</span>💀 Difficile</button>
-      <button onclick="start('mix')"><span class="lvl">TOUT MÉLANGÉ</span>🎲 Mix</button>
+      <button onclick="start('easy')"><span class="lvl">NIVEAU 1 · ÉCHAUFFEMENT</span>Facile</button>
+      <button onclick="start('medium')"><span class="lvl">NIVEAU 2 · CONFIRMÉ</span>Moyen</button>
+      <button onclick="start('hard')"><span class="lvl">NIVEAU 3 · EXPERT</span>Difficile</button>
+      <button onclick="start('mix')"><span class="lvl">TOUT MÉLANGÉ</span>Mix</button>
     </div>
-    <div class="hint">Toutes les questions texte et image sont jouables. Les questions 🎵 son s'activeront dès que les MP3 seront ajoutés dans assets/snd/.</div>
+    <div class="hint">100+ questions texte et image jouables · les questions SON s'activeront dès que les MP3 seront ajoutés dans assets/snd/ · touches 1-4 pour répondre</div>
   </section>
 
   <!-- ============ QUIZ ============ -->
@@ -36,8 +37,8 @@
     <div class="quiz-head">
       <span class="chip" id="q-round">QUESTION 1/10</span>
       <span class="chip" id="q-score">SCORE 0</span>
-      <span class="chip streak" id="q-streak">🔥 COMBO ×0</span>
-      <button class="mutebtn" id="mute" onclick="toggleMute()">🔊 Son</button>
+      <span class="chip streak" id="q-streak">COMBO ×0</span>
+      <button class="mutebtn" id="mute" onclick="toggleMute()">SON : ON</button>
     </div>
     <div class="qcard">
       <span class="pts" id="q-pts"></span>
@@ -53,7 +54,7 @@
   <!-- ============ RESULTS ============ -->
   <section class="screen" id="s-res">
     <div class="res">
-      <div class="trophy">🏆</div>
+      <div class="pxtrophy"></div>
       <h2 id="r-title">Partie terminée !</h2>
       <div class="sc" id="r-score">0 pts</div>
       <div id="r-sub"></div>
