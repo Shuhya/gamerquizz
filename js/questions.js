@@ -1,4 +1,4 @@
-/* ===== Banque de questions GamerQuizz =====
+// GamerQuizz - banque de questions
 const QUESTIONS = [
   // ---------- FACILE ----------
   { id:'f1', format:'citation', theme:'cultes', diff:'easy', asset:null, ic:'💬',
