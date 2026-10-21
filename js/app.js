@@ -77,7 +77,7 @@ function start(diff) {
   if (pool.length < 4) { alert('Choisis au moins un format compatible !'); return; }
   pool = shuffle(pool).slice(0, 10);
   qi = 0; score = 0; combo = 0; bestCombo = 0; good = 0; total = 0;
-  go('quiz'); renderQ();
+  go('quiz'); renderQ(); addMario();
 }
 function shuffle(a) { a = a.slice(); for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
 
@@ -88,9 +88,9 @@ function renderQ() {
   document.getElementById('q-streak').textContent = '🔥 COMBO ×' + combo;
   document.getElementById('q-type').textContent = q.ic + ' ' + q.format.toUpperCase();
   const v = document.getElementById('q-visual');
-  if (q.format === 'image') { const im = document.createElement('img'); im.className = 'reveal-img'; im.alt = 'capture mystere'; im.src = encodeURI(q.asset); im.onerror = function() { v.innerHTML = '<div class="big">' + q.ic + '</div><div style="font-size:11px;color:var(--dim)">Image manquante : depose-la dans ' + q.asset + '</div>'; }; v.innerHTML = ''; v.appendChild(im); }
-  else if (q.format === 'sound') v.innerHTML = '<div class="big">' + q.ic + '</div><audio controls autoplay style="width:90%" src="' + encodeURI(q.asset) + '"></audio>';
-  else v.innerHTML = '<div class="big">' + q.ic + '</div>';
+  if (q.format === 'image' || (q.asset && q.format !== 'sound')) showImgOrScene(v, q);
+  else if (q.format === 'sound') v.innerHTML = '<div class="scene"><div class="scene-ic">' + q.ic + '</div><div class="note n1">♪</div><div class="note n2">♫</div><div class="note n3">♪</div></div><audio controls autoplay style="width:88%; margin-top:6px" src="' + encodeURI(q.asset) + '"></audio>';
+  else v.innerHTML = sceneFor(q);
   document.getElementById('q-text').textContent = q.text;
   const opts = document.getElementById('q-opts'); opts.innerHTML = '';
   shuffle(q.opts.map((o,i)=>({o,i}))).forEach((x, idx) => {
@@ -105,7 +105,10 @@ function renderQ() {
   if (!count) { count = document.createElement('div'); count.className = 'q-count'; card.appendChild(count); }
   timer.classList.remove('urgent'); count.classList.remove('urgent');
   fill.style.transition = 'none'; fill.style.width = '100%';
-  requestAnimationFrame(() => { fill.style.transition = 'width 12s linear'; fill.style.width = '0%'; });
+  void fill.offsetWidth;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fill.style.transition = 'width 12s linear'; fill.style.width = '0%';
+  }));
   clearTimeout(timerT); clearTimeout(urgentT); clearInterval(countT); clearTimeout(tickT1); clearTimeout(tickT2); clearTimeout(tickT3);
   let left = 12;
   count.textContent = left + ' s';
@@ -113,6 +116,47 @@ function renderQ() {
   urgentT = setTimeout(() => { timer.classList.add('urgent'); if (count) count.classList.add('urgent'); }, 9500);
   tickT1 = setTimeout(sfxTick, 9800); tickT2 = setTimeout(sfxTick, 10800); tickT3 = setTimeout(sfxTick, 11800);
   timerT = setTimeout(() => { sfxTimeout(); flash('bad'); card.classList.add('shake'); combo = 0; setTimeout(next, 900); }, 12500);
+}
+function sceneFor(q) {
+  if (q.format === 'date') return '<div class="scene"><div class="scene-ic">📅</div><span class="yr y1">1994</span><span class="yr y2">2007</span><span class="yr y3">2017</span><span class="yr y4">2025</span></div>';
+  if (q.format === 'citation') return '<div class="scene"><div class="bubble">« ... »</div><div class="scene-ic small">💬</div></div>';
+  if (q.format === 'anecdote') return '<div class="scene"><div class="scene-ic glow">💡</div><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span></div>';
+  if (q.format === 'riddle') return '<div class="scene"><div class="puzzle p1">?</div><div class="puzzle p2">?</div><div class="puzzle p3">?</div><div class="scene-ic small">🧩</div></div>';
+  return '<div class="scene"><div class="scene-ic">' + (q.ic || '🎮') + '</div></div>';
+}
+function showImgOrScene(v, q) {
+  const im = document.createElement('img');
+  im.className = 'reveal-img'; im.alt = 'illustration';
+  im.src = encodeURI(q.asset);
+  im.onerror = function() { v.innerHTML = sceneFor(q); };
+  v.innerHTML = ''; v.appendChild(im);
+}
+/* --- pixel-art Mario qui se balade en bas de l'ecran de quiz --- */
+function pixelSprite(map, colors, px) {
+  const d = document.createElement('div');
+  d.className = 'px-sprite';
+  d.style.width = px + 'px'; d.style.height = px + 'px';
+  let sh = [];
+  map.forEach((row, y) => { for (let x = 0; x < row.length; x++) { const c = colors[row[x]]; if (c) sh.push((x*px) + 'px ' + (y*px) + 'px 0 0 ' + c); } });
+  d.style.boxShadow = sh.join(',');
+  return d;
+}
+function addMario() {
+  const host = document.getElementById('s-quiz');
+  if (!host || host.querySelector('.mario-lane')) return;
+  const lane = document.createElement('div');
+  lane.className = 'mario-lane';
+  const map = ['...RRRR...','..RRRRRRRR','..BBBSSKS.','.BSBSSSKSS','.BSBBSSSKS','.BBSSSSKKK','...SSSSS..','..RRDRRR..','.RRRDRRDRR','RRRRDDDDRR','SSRDYDDYRS','SSSDDDDDSS','SS.DDDD.SS','...DD.DD..','..BBB.BBB.','.BBB...BBB'];
+  const m = pixelSprite(map, { R:'#e52521', B:'#7a3b00', S:'#ffc7a0', K:'#111', D:'#2b53d6', Y:'#ffd800' }, 3);
+  m.classList.add('mario');
+  lane.appendChild(m);
+  const coin = document.createElement('div');
+  coin.className = 'float-coin'; coin.textContent = '🪙';
+  lane.appendChild(coin);
+  const goomba = document.createElement('div');
+  goomba.className = 'float-coin c2'; goomba.textContent = '🍄';
+  lane.appendChild(goomba);
+  host.appendChild(lane);
 }
 function flash(kind) {
   const f = document.getElementById('flash');
