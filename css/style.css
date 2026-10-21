@@ -102,6 +102,46 @@
   .mutebtn:hover { color:#fff; }
   .mutebtn.off { color:var(--red); }
 
+  /* ---- SCENES ANIMEES (questions texte) ---- */
+  .scene { position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+  .scene-ic { font-size:54px; animation:sceneFloat 3s ease-in-out infinite; }
+  .scene-ic.small { font-size:30px; position:absolute; bottom:12px; right:18px; opacity:.6; }
+  .scene-ic.glow { text-shadow:0 0 26px rgba(255,210,62,.7); animation:sceneFloat 3s ease-in-out infinite, glowPulse 1.6s ease-in-out infinite; }
+  @keyframes sceneFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+  @keyframes glowPulse { 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.35);} }
+  .yr { position:absolute; font-weight:900; color:var(--cyan); opacity:0; font-size:15px; text-shadow:0 0 12px rgba(0,229,255,.6); animation:yrUp 4.5s linear infinite; }
+  .yr.y1 { left:16%; bottom:20px; }
+  .yr.y2 { left:36%; bottom:40px; animation-delay:1.1s; }
+  .yr.y3 { right:34%; bottom:28px; animation-delay:2.2s; }
+  .yr.y4 { right:14%; bottom:44px; animation-delay:3.3s; }
+  @keyframes yrUp { 0%{opacity:0; transform:translateY(24px);} 18%{opacity:.9;} 80%{opacity:.5;} 100%{opacity:0; transform:translateY(-38px);} }
+  .bubble { position:relative; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); border-radius:18px;
+    padding:22px 34px; font-size:30px; font-weight:800; letter-spacing:3px; color:#fff; animation:bubbleWob 3.5s ease-in-out infinite; }
+  .bubble::after { content:''; position:absolute; bottom:-9px; left:34px; width:16px; height:16px; background:inherit;
+    border-right:1px solid rgba(255,255,255,.2); border-bottom:1px solid rgba(255,255,255,.2); transform:rotate(45deg); }
+  @keyframes bubbleWob { 0%,100%{transform:rotate(-2deg) scale(1);} 50%{transform:rotate(2deg) scale(1.05);} }
+  .spark { position:absolute; color:var(--gold); font-size:16px; opacity:0; animation:sparkFloat 2.8s ease-in-out infinite; }
+  .spark.s1 { left:24%; top:26%; } .spark.s2 { right:22%; top:34%; animation-delay:.9s; } .spark.s3 { left:46%; bottom:16px; animation-delay:1.8s; }
+  @keyframes sparkFloat { 0%{opacity:0; transform:translateY(8px) scale(.6);} 40%{opacity:1; transform:translateY(-8px) scale(1.1);} 100%{opacity:0; transform:translateY(-20px) scale(.6);} }
+  .puzzle { position:absolute; width:34px; height:34px; border-radius:8px; background:rgba(178,73,255,.14);
+    border:1px solid rgba(178,73,255,.45); color:var(--neon); font-weight:900; font-size:18px;
+    display:flex; align-items:center; justify-content:center; animation:puzzFloat 3.6s ease-in-out infinite; }
+  .puzzle.p1 { left:20%; top:26px; } .puzzle.p2 { right:20%; top:34px; animation-delay:1.2s; } .puzzle.p3 { left:44%; bottom:16px; animation-delay:2.4s; }
+  @keyframes puzzFloat { 0%,100%{transform:translateY(0) rotate(-6deg);} 50%{transform:translateY(-10px) rotate(6deg);} }
+  .note { position:absolute; color:var(--cyan); font-size:20px; font-weight:900; opacity:0; animation:noteUp 3s linear infinite; }
+  .note.n1 { left:22%; bottom:16px; } .note.n2 { right:26%; bottom:24px; animation-delay:1s; } .note.n3 { left:48%; bottom:10px; animation-delay:2s; }
+  @keyframes noteUp { 0%{opacity:0; transform:translateY(10px);} 30%{opacity:.9;} 100%{opacity:0; transform:translateY(-34px);} }
+
+  /* ---- MARIO PIXEL + DECOS ---- */
+  .mario-lane { position:fixed; left:0; right:0; bottom:0; height:60px; pointer-events:none; z-index:150; overflow:hidden; }
+  .mario { position:absolute; bottom:10px; left:-40px; animation:marioWalk 22s linear infinite, marioBob .35s steps(2) infinite; }
+  @keyframes marioWalk { from { left:-40px; } to { left:100%; } }
+  @keyframes marioBob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-2px); } }
+  .px-sprite { image-rendering:pixelated; }
+  .float-coin { position:absolute; bottom:18px; font-size:18px; animation:coinFloat 5s ease-in-out infinite; opacity:.85; }
+  .float-coin.c2 { animation-delay:2.5s; }
+  @keyframes coinFloat { 0%{ left:8%; transform:translateY(0);} 50%{ left:84%; transform:translateY(-14px);} 100%{ left:8%; transform:translateY(0);} }
+
   /* RESULTS */
   .res { text-align:center; padding:60px 20px; }
   .res .trophy { font-size:72px; animation:floaty 3s ease-in-out infinite; }
