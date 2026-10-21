@@ -48,7 +48,13 @@ const ICONS = {
   date:     '<i class="fi fi-rr-calendar"></i>',
   riddle:   '<i class="fi fi-rr-puzzle"></i>',
   retro:    '<i class="fi fi-rr-gamepad"></i>',
-  pokemon:  '<i class="fi fi-rr-ball"></i>',
+  pokemon:  '<svg class="pkball" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">'
+    + '<defs><clipPath id="pk-top"><rect x="0" y="0" width="24" height="12"/></clipPath></defs>'
+    + '<circle cx="12" cy="12" r="10.3" fill="#fff" stroke="#111" stroke-width="1.4"/>'
+    + '<circle cx="12" cy="12" r="10.3" fill="#e52521" clip-path="url(#pk-top)"/>'
+    + '<rect x="0.7" y="10.4" width="22.6" height="3.2" fill="#111"/>'
+    + '<circle cx="12" cy="12" r="4" fill="#fff" stroke="#111" stroke-width="1.4"/>'
+    + '<circle cx="12" cy="12" r="1.7" fill="#111"/></svg>',
 };
 const FORMATS = [
   { key:'all', label:'Tous', tag:'ALL' },
