@@ -88,8 +88,7 @@ function renderQ() {
   document.getElementById('q-streak').textContent = '🔥 COMBO ×' + combo;
   document.getElementById('q-type').textContent = q.ic + ' ' + q.format.toUpperCase();
   const v = document.getElementById('q-visual');
-  if (q.format === 'image') v.innerHTML = '<img class="reveal-img" src="' + encodeURI(q.asset) + '" alt="capture mystère" ' +
-    'onerror="this.outerHTML='<div class=big>📸</div><div style=font-size:11px;color:var(--dim)>Image manquante : dépose-la dans ' + q.asset + '</div>'">';
+  if (q.format === 'image') { const im = document.createElement('img'); im.className = 'reveal-img'; im.alt = 'capture mystere'; im.src = encodeURI(q.asset); im.onerror = function() { v.innerHTML = '<div class="big">' + q.ic + '</div><div style="font-size:11px;color:var(--dim)">Image manquante : depose-la dans ' + q.asset + '</div>'; }; v.innerHTML = ''; v.appendChild(im); }
   else if (q.format === 'sound') v.innerHTML = '<div class="big">' + q.ic + '</div><audio controls autoplay style="width:90%" src="' + encodeURI(q.asset) + '"></audio>';
   else v.innerHTML = '<div class="big">' + q.ic + '</div>';
   document.getElementById('q-text').textContent = q.text;
