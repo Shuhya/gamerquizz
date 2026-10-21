@@ -67,6 +67,9 @@
     align-items:center; justify-content:center; gap:8px; background:radial-gradient(circle at 50% 35%, #1b1035, #0a0a14);
     border:1px solid rgba(255,255,255,.12); }
   .qvisual .big { font-size:52px; }
+  .reveal-img { width:100%; height:150px; object-fit:cover; border-radius:12px;
+    animation:depixel 10s ease-out forwards; }
+  @keyframes depixel { from { filter:blur(22px) saturate(1.6); transform:scale(1.06); } to { filter:blur(0) saturate(1); transform:scale(1); } }
   .qtext { font-size:16.5px; font-weight:600; line-height:1.55; text-align:center; margin-bottom:18px; }
   .qopts { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   @media(max-width:520px){ .qopts{grid-template-columns:1fr;} }
@@ -120,7 +123,7 @@
       <button onclick="start('hard')"><span class="lvl">NIVEAU 3 · EXPERT</span>💀 Difficile</button>
       <button onclick="start('mix')"><span class="lvl">TOUT MÉLANGÉ</span>🎲 Mix</button>
     </div>
-    <div class="hint">Formats texte 100% jouables. Les questions 📸 image et 🎵 son sont prêtes : il reste à déposer les fichiers médias dans assets/questions/.</div>
+    <div class="hint">Toutes les questions texte et image sont jouables. Les questions 🎵 son s'activeront dès que les MP3 seront ajoutés dans assets/snd/.</div>
   </section>
 
   <!-- ============ QUIZ ============ -->
@@ -165,7 +168,7 @@
    BASE DE QUESTIONS — structure définitive du MVP.
    Chaque question : { id, format, theme, diff, asset, text, opts, ans }
    - asset: null pour les formats texte ; pour 'image' et 'sound',
-     chemin du fichier à déposer dans assets/questions/ (ex: "img/zelda_botw.webp").
+     chemin du fichier à déposer dans assets/ (ex: "img/zelda_botw.webp").
      En attendant, un emoji placeholder est affiché.
    - Formats texte (citation, anecdote, date, riddle) : jouables maintenant.
    ============================================================= */
@@ -267,146 +270,146 @@ const QUESTIONS = [
     opts:['Call of Juarez','Red Dead Redemption','Gun','Desperados'], ans:1 },
 
   // ---------- QUESTIONS IMAGE/SON (structure prête, asset à fournir) ----------
-  { id:'img1', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/zelda_botw.webp', ic:'📸',
+  { id:'img1', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/800px-BOTW_plaine_d_hyrule.jpg', ic:'📸',
     text:'Cette capture se précise... quel jeu de 2017 montre-t-elle ?',
     opts:['Elden Ring','Zelda: Breath of the Wild','Genshin Impact','Horizon Zero Dawn'], ans:1 },
-  { id:'img2', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/minecraft_1.webp', ic:'📸',
+  { id:'img2', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/minecraftsimple.jpg', ic:'📸',
     text:'Devine le jeu derrière cette capture pixellisée.',
     opts:['Terraria','Minecraft','Starbound','Roblox'], ans:1 },
-  { id:'img3', format:'image', theme:'rpg', diff:'hard', asset:'assets/questions/img/ff7_midgar.webp', ic:'📸',
+  { id:'img3', format:'image', theme:'rpg', diff:'hard', asset:'assets/img/FF7 original Midgar.jpg', ic:'📸',
     text:'Quelle ville dystopique apparaît sur cette capture ?',
     opts:['Midgar (FF7)','Zanarkand (FF10)','Alexandrie (FF9)','Lindblum (FF9)'], ans:0 },
-  { id:'snd1', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/minecraft_theme.mp3', ic:'🎵',
+  { id:'snd1', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/minecraft_theme.mp3', ic:'🎵',
     text:'Écoute ce thème calme et sandbox... quel jeu ?',
     opts:['Terraria','Minecraft','Stardew Valley','Animal Crossing'], ans:1 },
-  { id:'snd2', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/gerudo_valley.mp3', ic:'🎵',
+  { id:'snd2', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/gerudo_valley.mp3', ic:'🎵',
     text:'Ce thème aux guitares espagnoles vient de quel jeu ?',
     opts:['Zelda: Ocarina of Time','Castlevania: SOTN','Dark Souls','Dragon Quest'], ans:0 },
-  { id:'snd3', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/portal_still_alive.mp3', ic:'🎵',
+  { id:'snd3', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/portal_still_alive.mp3', ic:'🎵',
     text:'Cette chanson de fin sarcastique vient de quel jeu ?',
     opts:['Portal','Portal 2','Stanley Parable','Tetris Effect'], ans:0 },
 
   // ---------- NOUVEAU LOT : IMAGES (20) ----------
-  { id:'img4', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/mario_1_1.webp', ic:'📸',
+  { id:'img4', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/mario 1.1.jpg', ic:'📸',
     text:'Ce niveau de plateforme emblématique ouvre quel jeu culte de 1985 ?',
     opts:['Super Mario Bros','Sonic the Hedgehog','Megaman','Duck Tales'], ans:0 },
-  { id:'img5', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/gta_v_los_santos.webp', ic:'📸',
+  { id:'img5', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/GTA LOS SANTOS.png', ic:'📸',
     text:'Quelle ville apparaît sur cette capture ?',
     opts:['Liberty City','Vice City','Los Santos','San Fierro'], ans:2 },
-  { id:'img6', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/pokemon_pallet.webp', ic:'📸',
+  { id:'img6', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/images.png', ic:'📸',
     text:'Cette ville avec son Centre Pokémon et son arène... quelle série de jeux ?',
     opts:['Dragon Quest','Pokémon','Yo-kai Watch','Temtem'], ans:1 },
-  { id:'img7', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/tetris.webp', ic:'📸',
+  { id:'img7', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/images.jpg', ic:'📸',
     text:'Aucune hésitation possible : quel jeu ?',
     opts:['Puyo Puyo','Tetris','Lumines','Columns'], ans:1 },
-  { id:'img8', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/sonic_green_hill.webp', ic:'📸',
+  { id:'img8', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/sonic.jpg', ic:'📸',
     text:'Cette usine bleue aux palmiers... dans quel jeu de 1992 courses-tu ici ?',
     opts:['Sonic the Hedgehog','Sonic 2','Sonic 3','Knuckles Chaotix'], ans:1 },
-  { id:'img9', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/halo_ring.webp', ic:'📸',
+  { id:'img9', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/550px-HCEA_terminal_Halos_et_Arche.jpg', ic:'📸',
     text:'Cette structure géante dans l\'espace vient de quelle franchise ?',
     opts:['Mass Effect','Halo','Destiny','Starfield'], ans:1 },
-  { id:'img10', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/skyrim_whiterun.webp', ic:'📸',
+  { id:'img10', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/skyrim.jpg', ic:'📸',
     text:'Quelle ville fortifiée apparaît à l\'horizon ?',
     opts:['Solitude','Whiterun','Windhelm','Riften'], ans:1 },
-  { id:'img11', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/dark_souls_bonfire.webp', ic:'📸',
+  { id:'img11', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/darksoul.jpg', ic:'📸',
     text:'Ce feu de camp est devenu une icône. Quel jeu ?',
     opts:['Dark Souls','Bloodborne','Elden Ring','Demon\'s Souls'], ans:0 },
-  { id:'img12', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/mk_blood.webp', ic:'📸',
+  { id:'img12', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/mortalkombat.jpg', ic:'📸',
     text:'Ce jeu de combat tristement célèbre pour sa violence ?',
     opts:['Street Fighter II','Tekken 3','Mortal Kombat','Killer Instinct'], ans:2 },
-  { id:'img13', format:'image', theme:'rpg', diff:'medium', asset:'assets/questions/img/witcher3_novigrad.webp', ic:'📸',
+  { id:'img13', format:'image', theme:'rpg', diff:'medium', asset:'assets/img/witcherbanque.jpg', ic:'📸',
     text:'Cette ville portuaire massive... quel jeu ?',
     opts:['The Witcher 3','Skyrim','Dragon\'s Dogma','Kingdom Come'], ans:0 },
-  { id:'img14', format:'image', theme:'cultes', diff:'hard', asset:'assets/questions/img/metroid_brinstar.webp', ic:'📸',
+  { id:'img14', format:'image', theme:'cultes', diff:'hard', asset:'assets/img/metroid.png', ic:'📸',
     text:'Cette zone de cavernes violette... quel jeu de la NES ?',
     opts:['Metroid','Blaster Master','The Guardian Legend','Faxanadu'], ans:0 },
-  { id:'img15', format:'image', theme:'cultes', diff:'hard', asset:'assets/questions/img/chrono_trigger.webp', ic:'📸',
+  { id:'img15', format:'image', theme:'cultes', diff:'hard', asset:'assets/img/chronotrigger.jpg', ic:'📸',
     text:'Ce RPG culte du SNES développé par l\'équipe « Dream » de Square ?',
     opts:['Chrono Trigger','Final Fantasy VI','Secret of Mana','EarthBound'], ans:0 },
-  { id:'img16', format:'image', theme:'indé', diff:'hard', asset:'assets/questions/img/undertale_ruins.webp', ic:'📸',
+  { id:'img16', format:'image', theme:'indé', diff:'hard', asset:'assets/img/undertale.png', ic:'📸',
     text:'Ces ruines violettes au début d\'un voyage émouvant... quel jeu indé ?',
     opts:['Undertale','Hollow Knight','OneShot','Deltarune'], ans:0 },
-  { id:'img17', format:'image', theme:'cultes', diff:'hard', asset:'assets/questions/img/doom_e1m1.webp', ic:'📸',
+  { id:'img17', format:'image', theme:'cultes', diff:'hard', asset:'assets/img/doom.jpg', ic:'📸',
     text:'Ce niveau légendaire de 1993 commence par quel jeu ?',
     opts:['Wolfenstein 3D','Doom','Quake','Duke Nukem 3D'], ans:1 },
-  { id:'img18', format:'image', theme:'cultes', diff:'hard', asset:'assets/questions/img/portal_chamber.webp', ic:'📸',
+  { id:'img18', format:'image', theme:'cultes', diff:'hard', asset:'assets/img/portal.jpg', ic:'📸',
     text:'Quelle salle de test aux murs blancs ?',
     opts:['Portal','The Talos Principle','Superliminal','Antichamber'], ans:0 },
-  { id:'img19', format:'image', theme:'rpg', diff:'medium', asset:'assets/questions/img/ff7_remake_midgar.webp', ic:'📸',
+  { id:'img19', format:'image', theme:'rpg', diff:'medium', asset:'assets/img/midgar.jpg', ic:'📸',
     text:'Cette mégapole polluée et sa réacteur... quel opus ?',
     opts:['FF7 Remake','FF7 original','FF7 Rebirth','Advent Children'], ans:0 },
-  { id:'img20', format:'image', theme:'cultes', diff:'easy', asset:'assets/questions/img/among_us.webp', ic:'📸',
+  { id:'img20', format:'image', theme:'cultes', diff:'easy', asset:'assets/img/amongus.jpg', ic:'📸',
     text:'Ces petits astronautes rondouillards sont devenus un meme. Quel jeu ?',
     opts:['Fall Guys','Among Us','Gang Beasts','Human Fall Flat'], ans:1 },
-  { id:'img21', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/pacmaze.webp', ic:'📸',
+  { id:'img21', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/pacman.jpg', ic:'📸',
     text:'Ce labyrinthe emblématique... quel jeu de 1980 ?',
     opts:['Pac-Man','Lady Bug','Mouse Trap','Pengo'], ans:0 },
-  { id:'img22', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/littlebigplanet3.webp', ic:'📸',
+  { id:'img22', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/littlebigplanet3.webp', ic:'📸',
     text:'Ce niveau artisanal façon diorama avec Sackboy... quel jeu de Media Molecule ?',
     opts:['LittleBigPlanet 3','Dreams','Tearaway','Craftworld'], ans:0 },
-  { id:'img23', format:'image', theme:'cultes', diff:'medium', asset:'assets/questions/img/zelda_ocarina.webp', ic:'📸',
+  { id:'img23', format:'image', theme:'cultes', diff:'medium', asset:'assets/img/zeldacheva.jpg', ic:'📸',
     text:'Cette plaine traversée à cheval, château au loin... quel épisode ?',
     opts:['Zelda: Ocarina of Time','Zelda: Breath of the Wild','Zelda: Twilight Princess','Zelda: TOTK'], ans:1 },
 
   // ---------- NOUVEAU LOT : SONS (20) ----------
-  { id:'snd4', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/mario_theme.mp3', ic:'🎵',
+  { id:'snd4', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/mario_theme.mp3', ic:'🎵',
     text:'Le thème le plus reconnu de l\'histoire du jeu vidéo ?',
     opts:['Super Mario Bros','Sonic','Zelda','Kirby'], ans:0 },
-  { id:'snd5', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/tetris_theme.mp3', ic:'🎵',
+  { id:'snd5', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/tetris_theme.mp3', ic:'🎵',
     text:'Cette mélodie inspirée d\'une chanson russe folk ?',
     opts:['Tetris','Dr. Mario','Puyo Puyo','Lumines'], ans:0 },
-  { id:'snd6', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/pokemon_center.mp3', ic:'🎵',
+  { id:'snd6', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/pokemon_center.mp3', ic:'🎵',
     text:'Cette musique apaisante vient de quel lieu réconfortant ?',
     opts:['Pokémon Center','Animal Crossing village','Zelda: Lon Lon Ranch','Stardew Valley farm'], ans:0 },
-  { id:'snd7', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/green_hill.mp3', ic:'🎵',
+  { id:'snd7', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/green_hill.mp3', ic:'🎵',
     text:'Ce thème au rythme funk vient de quel niveau ?',
     opts:['Green Hill (Sonic)','Emerald Hill (Sonic 2)','Chemical Plant (Sonic 2)','Angel Island (Sonic 3)'], ans:0 },
-  { id:'snd8', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/gta_san_andreas_theme.mp3', ic:'🎵',
+  { id:'snd8', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/gta_san_andreas_theme.mp3', ic:'🎵',
     text:'Ce thème rap West Coast vient de quel GTA ?',
     opts:['GTA San Andreas','GTA Vice City','GTA V','GTA IV'], ans:0 },
-  { id:'snd9', format:'sound', theme:'rpg', diff:'medium', asset:'assets/questions/snd/ff7_battle.mp3', ic:'🎵',
+  { id:'snd9', format:'sound', theme:'rpg', diff:'medium', asset:'assets/snd/ff7_battle.mp3', ic:'🎵',
     text:'Ce thème de combat emblématique... quel Final Fantasy ?',
     opts:['FF6','FF7','FF8','FF9'], ans:1 },
-  { id:'snd10', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/halo_theme.mp3', ic:'🎵',
+  { id:'snd10', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/halo_theme.mp3', ic:'🎵',
     text:'Ce chant grégorien en mode épique... quelle franchise ?',
     opts:['Halo','Gears of War','Destiny','Mass Effect'], ans:0 },
-  { id:'snd11', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/skyrim_dragonborn.mp3', ic:'🎵',
+  { id:'snd11', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/skyrim_dragonborn.mp3', ic:'🎵',
     text:'« Dovahkiin ! » — quel jeu ?',
     opts:['Skyrim','Oblivion','Morrowind','Elden Ring'], ans:0 },
-  { id:'snd12', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/dk_rap.mp3', ic:'🎵',
+  { id:'snd12', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/dk_rap.mp3', ic:'🎵',
     text:'Ce « rap » mémorable des années 2000... quel jeu ?',
     opts:['Donkey Kong 64','Conker\'s Bad Fur Day','Banjo-Kazooie','Super Mario 64'], ans:0 },
-  { id:'snd13', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/undertale_megalovania.mp3', ic:'🎵',
+  { id:'snd13', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/undertale_megalovania.mp3', ic:'🎵',
     text:'Ce morceau devenu meme absolu... quel boss ?',
     opts:['Sans (Undertale)','Jevil (Deltarune)','Cuphead','Zote (Hollow Knight)'], ans:0 },
-  { id:'snd14', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/mgs_alert.mp3', ic:'🎵',
+  { id:'snd14', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/mgs_alert.mp3', ic:'🎵',
     text:'Ce son strident synonyme de « t\'es fait »... quelle série ?',
     opts:['Metal Gear Solid','Splinter Cell','Hitman','Deus Ex'], ans:0 },
-  { id:'snd15', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/civilopedia.mp3', ic:'🎵',
+  { id:'snd15', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/civilopedia.mp3', ic:'🎵',
     text:'Ce son de découverte... quel jeu de gestion ?',
     opts:['Civilization','Age of Empires','SimCity','RimWorld'], ans:0 },
-  { id:'snd16', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/counterstrike_bomb.mp3', ic:'🎵',
+  { id:'snd16', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/counterstrike_bomb.mp3', ic:'🎵',
     text:'« The bomb has been planted » — quel jeu ?',
     opts:['Counter-Strike','Valorant','Rainbow Six','Call of Duty'], ans:0 },
-  { id:'snd17', format:'sound', theme:'rpg', diff:'hard', asset:'assets/questions/snd/chrono_trigger_battle.mp3', ic:'🎵',
+  { id:'snd17', format:'sound', theme:'rpg', diff:'hard', asset:'assets/snd/chrono_trigger_battle.mp3', ic:'🎵',
     text:'Ce thème de combat signé Nobuo Uematsu... quel RPG du SNES ?',
     opts:['Chrono Trigger','Final Fantasy VI','Secret of Mana','EarthBound'], ans:0 },
-  { id:'snd18', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/wii_shop.mp3', ic:'🎵',
+  { id:'snd18', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/wii_shop.mp3', ic:'🎵',
     text:'Ce jingle de boutique devenu culte... quelle console ?',
     opts:['Wii (Shop Channel)','DSi','3DS eShop','Switch eShop'], ans:0 },
-  { id:'snd19', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/kirby_dedede.mp3', ic:'🎵',
+  { id:'snd19', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/kirby_dedede.mp3', ic:'🎵',
     text:'Ce thème royal et martial... quel jeu de la série rose ?',
     opts:['Kirby\'s Dream Land','Kirby Super Star','Kirby 64','Kirby Air Ride'], ans:0 },
-  { id:'snd20', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/zelda_secret.mp3', ic:'🎵',
+  { id:'snd20', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/zelda_secret.mp3', ic:'🎵',
     text:'Ce jingle de découverte culte... quelle série ?',
     opts:['Zelda','Metroid','Castlevania','Megaman'], ans:0 },
-  { id:'snd21', format:'sound', theme:'cultes', diff:'easy', asset:'assets/questions/snd/fallout_war_never_changes.mp3', ic:'🎵',
+  { id:'snd21', format:'sound', theme:'cultes', diff:'easy', asset:'assets/snd/fallout_war_never_changes.mp3', ic:'🎵',
     text:'Cette narration d\'intro sur la guerre... quelle série ?',
     opts:['Fallout','The Last of Us','Metro','Wasteland'], ans:0 },
-  { id:'snd22', format:'sound', theme:'cultes', diff:'hard', asset:'assets/questions/snd/katamari_damacy.mp3', ic:'🎵',
+  { id:'snd22', format:'sound', theme:'cultes', diff:'hard', asset:'assets/snd/katamari_damacy.mp3', ic:'🎵',
     text:'Ce thème pop japonais délirant... quel jeu ?',
     opts:['Katamari Damacy','LocoRoco','Patapon','Taiko no Tatsujin'], ans:0 },
-  { id:'snd23', format:'sound', theme:'cultes', diff:'medium', asset:'assets/questions/snd/playstation_startup.mp3', ic:'🎵',
+  { id:'snd23', format:'sound', theme:'cultes', diff:'medium', asset:'assets/snd/playstation_startup.mp3', ic:'🎵',
     text:'Ce son de démarrage mythique... quelle console ?',
     opts:['PlayStation 1','PlayStation 2','Dreamcast','GameCube'], ans:0 },
 ];
@@ -463,8 +466,8 @@ function renderQ() {
   document.getElementById('q-streak').textContent = '🔥 COMBO ×' + combo;
   document.getElementById('q-type').textContent = q.ic + ' ' + q.format.toUpperCase();
   const v = document.getElementById('q-visual');
-  if (q.format === 'image') v.innerHTML = '<div class="big">' + q.ic + '</div><div style="font-size:11px;color:var(--dim)">asset : ' + q.asset + '</div>';
-  else if (q.format === 'sound') v.innerHTML = '<div class="big">' + q.ic + '</div><div style="font-size:11px;color:var(--dim)">audio : ' + q.asset + '</div>';
+  if (q.format === 'image') v.innerHTML = '<img class="reveal-img" src="' + encodeURI(q.asset) + '" alt="capture mystère">';
+  else if (q.format === 'sound') v.innerHTML = '<div class="big">' + q.ic + '</div><audio controls autoplay style="width:90%" src="' + encodeURI(q.asset) + '"></audio>';
   else v.innerHTML = '<div class="big">' + q.ic + '</div>';
   document.getElementById('q-text').textContent = q.text;
   const opts = document.getElementById('q-opts'); opts.innerHTML = '';
