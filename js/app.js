@@ -38,16 +38,17 @@ function toggleMute() {
   b.classList.toggle('off', muted);
 }
 // Icônes SVG pixel-art inline (aucune dépendance externe, aucun emoji)
+// Icones Flaticon (Uicons, CDN officiel) — attribution requise : voir footer
 const ICONS = {
-  all:      '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg>',
-  image:    '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M1 2h12v10H1V2zm1 1v5l2-2 2 2 3-3 3 3V3H2z"/><path d="M9.5 4.5h1.5v1.5H9.5z" fill="#07070f"/><path d="M10 5h1v1h-1z"/></svg>',
-  sound:    '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M1 5h3l4-4v12l-4-4H1V5z"/><rect x="10" y="5" width="1.5" height="4"/><rect x="12" y="3" width="1.5" height="8"/></svg>',
-  citation: '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M2 3h4v4H4v2H2V3zm6 0h4v4h-2v2H8V3z"/></svg>',
-  anecdote: '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1a5 5 0 0 0-3 9v1h6v-1a5 5 0 0 0-3-9zM5 12h4v1H5v-1z"/><path d="M5 3.5h1.5V5H5z" fill="#07070f"/></svg>',
-  date:     '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M2 2h10v10H2V2zm1 4v5h8V6H3zM5 1h1v2H5V1zm3 0h1v2H8V1z" fill-rule="evenodd"/><rect x="5" y="8" width="1.5" height="1.5"/><rect x="8" y="8" width="1.5" height="1.5"/></svg>',
-  riddle:   '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M1 1h6v3a2 2 0 1 1 0 4v4H1V1zm12 0v5h-2a2 2 0 1 0 0 4h2v2H8V1h5z"/></svg>',
-  retro:    '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M3 4h8a3 3 0 0 1 1 6H2a3 3 0 0 1 1-6zM1 5h1v2H1V5zm11 0h1v2h-1V5z"/><rect x="3" y="2" width="8" height="1.5"/></svg>',
-  pokemon:  '<svg class="ic" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6zM1 7a6 6 0 0 0 12 0H1z"/><circle cx="7" cy="6" r="1.6" fill="#07070f"/></svg>',
+  all:      '<i class="fi fi-rr-apps"></i>',
+  image:    '<i class="fi fi-rr-picture"></i>',
+  sound:    '<i class="fi fi-rr-music"></i>',
+  citation: '<i class="fi fi-rr-quote-right"></i>',
+  anecdote: '<i class="fi fi-rr-lightbulb-on"></i>',
+  date:     '<i class="fi fi-rr-calendar"></i>',
+  riddle:   '<i class="fi fi-rr-puzzle"></i>',
+  retro:    '<i class="fi fi-rr-gamepad"></i>',
+  pokemon:  '<i class="fi fi-rr-ball"></i>',
 };
 const FORMATS = [
   { key:'all', label:'Tous', tag:'ALL' },
