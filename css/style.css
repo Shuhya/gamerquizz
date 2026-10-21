@@ -161,6 +161,9 @@
     border:1px solid var(--line); background:transparent; color:var(--dim);
     font-weight:800; font-size:14px; cursor:pointer; transition:all .2s; }
   .theme-btn .fi { font-size:16px; opacity:.85; }
+  .pkball { display:inline-block; vertical-align:-3px; }
+  .theme-btn:hover .pkball, .theme-btn.on .pkball { filter:drop-shadow(0 0 5px rgba(255,77,77,.7)); transform:scale(1.12); }
+  .pkball { transition:transform .2s; }
   .theme-btn.on .fi { opacity:1; filter:drop-shadow(0 0 5px currentColor); }
   .theme-btn:hover { color:#fff; border-color:rgba(255,255,255,.35); }
   .theme-btn.on { color:var(--cyan); border-color:rgba(0,229,255,.5); background:rgba(0,229,255,.08);
