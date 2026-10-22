@@ -1,0 +1,18 @@
+{
+  "probation": {
+    "tempo": 143.55,
+    "dur": 229.3,
+    "key_major_est": "C",
+    "energy": 0.1975,
+    "first_beat": 6.211,
+    "beat_count": 513
+  },
+  "moonlight": {
+    "tempo": 129.2,
+    "dur": 137.2,
+    "key_major_est": "C",
+    "energy": 0.2109,
+    "first_beat": 7.419,
+    "beat_count": 267
+  }
+}
