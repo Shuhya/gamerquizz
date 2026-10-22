@@ -1,5 +1,8 @@
 name: separate
-on: [push]
+on:
+  push:
+    branches: [mix-lab]
+    paths: ['music/**', '.github/workflows/separate.yml', 'scripts/analyze.py']
 permissions:
   contents: write
 jobs:
@@ -11,8 +14,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install audio deps
+      - name: ffmpeg + deps audio
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
           pip install -q demucs librosa soundfile
       - name: Analyse (BPM, tonalite)
