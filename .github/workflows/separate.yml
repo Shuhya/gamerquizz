@@ -26,9 +26,7 @@ jobs:
         run: |
           mkdir -p stems
           demucs -n htdemucs --two-stems=vocals -o stems music/probation.mp3 music/moonlight.mp3
-          find stems -name '*.wav' | while read f; do
-            ffmpeg -y -loglevel error -i "$f" -c:a flac "${f%.wav}.flac" && rm "$f"
-          done
+          find stems -name '*.wav' -exec sh -c 'ffmpeg -nostdin -y -loglevel error -i "$1" -c:a flac "${1%.wav}.flac" && rm "$1"' _ {} \;
           ls -R stems
       - name: Commit stems
         run: |
