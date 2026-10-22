@@ -1,0 +1,34 @@
+name: separate
+on: [push]
+permissions:
+  contents: write
+jobs:
+  sep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install audio deps
+        run: |
+          pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -q demucs librosa soundfile
+      - name: Analyse (BPM, tonalite)
+        run: python scripts/analyze.py music/probation.mp3 music/moonlight.mp3 || true
+      - name: Demucs separation vocals / instru
+        run: |
+          mkdir -p stems
+          demucs -n htdemucs --two-stems=vocals -o stems music/probation.mp3 music/moonlight.mp3
+          find stems -name '*.wav' | while read f; do
+            ffmpeg -y -loglevel error -i "$f" -c:a flac "${f%.wav}.flac" && rm "$f"
+          done
+          ls -R stems
+      - name: Commit stems
+        run: |
+          git config user.name "mixbot"
+          git config user.email "bot@users.noreply.github.com"
+          git add stems analysis.json 2>/dev/null || true
+          git commit -m "stems + analyse" || echo "rien a committer"
+          git push
